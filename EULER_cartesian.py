@@ -20,7 +20,7 @@ def F(x, y, x_dot, y_dot):
 
     return F1, F2, F3, F4
 
-def U(xn, yn, xdn, ydn, n_lim):
+def U(xn, yn, xdn, ydn, dt, n_lim):
 
     x = [xn]; y = [yn]; U = [xdn]; V = [ydn]
 
@@ -29,10 +29,10 @@ def U(xn, yn, xdn, ydn, n_lim):
 
         F1, F2, F3, F4 = F(x[n], y[n], U[n], V[n])
 
-        x.append(x[n] + dT * F1)
-        y.append(y[n] + dT * F2)
-        U.append(U[n] + dT * F3)
-        V.append(V[n] + dT* F4)
+        x.append(x[n] + dt * F1)
+        y.append(y[n] + dt * F2)
+        U.append(U[n] + dt * F3)
+        V.append(V[n] + dt * F4)
         
         n += 1
 
@@ -79,9 +79,9 @@ def plot(x, y, U, V, vector_flag):
 if __name__ == "__main__":
     xn=1; yn = 0; xdn = 0; ydn = 1
     dT = 0.1
-    n_lim = 50000
-    plot_vector_flag = False
+    n_lim = 500
+    plot_vector_flag = True
 
-    x, y, U, V = U(xn, yn, xdn, ydn, n_lim)
+    x, y, U, V = U(xn, yn, xdn, ydn, dT, n_lim)
 
     plot(x, y, U ,V, plot_vector_flag)
