@@ -54,6 +54,10 @@ def Inverse_Euler(U_n, t, dt, F):
     
     return newton(G, U_n, maxiter=10000)
 
+def Richardson(U_n, t, dt, F):
+
+    return
+
 
 def Cauchy(U_, dT, scheme, F):
     
@@ -63,9 +67,29 @@ def Cauchy(U_, dT, scheme, F):
         U_[i+1] = scheme(U_[i], T, dT, F)
 
     plot(U_[:,0], U_[:,1], scheme.__name__)
- 
-    return
 
+    return U_
+
+
+def Cauchy_Error(U_, dT, scheme, F):
+
+    N = len(U_[:,1])
+    U_refined = np.array(np.zeros((2*N-1, 4)))
+    U_refined[0, :] = U_[0,:]
+
+    
+    U1 = Cauchy(U_, dT, scheme, F)
+    U2 = Cauchy(U_refined, dT/2, scheme, F)
+
+    Error = np.array(np.zeros((N, 4)))
+    t = np.array(np.zeros(N))
+
+    for i in range(0, N):
+        t[i] = dT*i
+        Error[i,:] = U2[2*i,:] - U1[i,:]
+    
+    plot( t, Error[:,0],"Error " + scheme.__name__)
+    
 
 def plot(x, y, method):
 
@@ -94,13 +118,11 @@ def plot(x, y, method):
 if __name__ == "__main__":
 
     xn_0=1; yn_0 = 0; xdn_0 = 0; ydn_0 = 1 # Declaración de condiciones iniciales
-    dT = 0.01
-    n_lim = 10000
+    dT = 0.001
+    N = 30000 # Numero de nodos
 
-    U = np.array(np.zeros((n_lim, 4)))
+    U = np.array(np.zeros((N, 4)))
     U[0] = [xn_0, yn_0, xdn_0, ydn_0]
 
-    Cauchy(U, dT, Euler, Kepler)
-    Cauchy(U, dT, RK4, Kepler)
-    Cauchy(U, dT, Crank_Nicolson, Kepler)
-    Cauchy(U, dT*0.1, Inverse_Euler, Kepler)
+
+    Cauchy_Error(U, dT, Inverse_Euler, Kepler)
