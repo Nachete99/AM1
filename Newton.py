@@ -10,11 +10,20 @@ import matplotlib.pyplot as plt
 # -----------------------------------------------------------------------
 
 
-def Newton(F, x_0, Fp, tol = 1e-8, maxiter=50):
+def Newton(F, x_0, F_dif=None, tol = 1e-8, maxiter=50):
 
+    def Fp(x):
+        if not F_dif:
+            delta = 1e-4
+            return (F(x+delta) - F(x-delta))/(2*delta)
+        else:
+            return F_dif(x)
+
+             
     xn = x_0
     Error = tol + 1
     iter = 0
+
 
     while Error > tol:
 
@@ -66,5 +75,5 @@ y = jorge(x)
 
 plot(x, y, jorge.__name__)
 
-Sol = Newton(jorge, -10, dif_jorge)
+Sol = Newton(jorge, -10)
 print(Sol)
