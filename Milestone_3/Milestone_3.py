@@ -59,6 +59,18 @@ def Richardson(U_n, t, dt, F):
     return
 
 
+def Leap_Frog(F, t1, t2, U):
+    ## U1 es global
+    if t1 == 0:
+        U1 = (t2-t1)*F(U)
+        return U1
+
+    else:
+        U2 = U1 + U + (t2 - t1)* F(U)
+        U1 = U
+        return U2
+
+
 def Cauchy(U_, dT, scheme, F):
     
     for i in range(len(U_[:,1])-1):
@@ -159,4 +171,4 @@ if __name__ == "__main__":
     # Cauchy_Error(U, dT, Crank_Nicolson, Kepler)
     # Cauchy_Error(U, dT, Inverse_Euler, Kepler)
 
-    Convergence(U, dT, Euler, Kepler)
+    Convergence(U, dT, RK4, Kepler)
